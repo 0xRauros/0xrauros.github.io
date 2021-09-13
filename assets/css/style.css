@@ -25,6 +25,19 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Permanent Marker', cursive;
 }
 
+/*Colors*/
+
+.neon-blue{
+  color: #09fbd3;
+}
+
+.neon-border {
+  border-style: solid;
+  border-color: #09fbd3;
+  border-width: 2px;
+  
+}
+
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
@@ -713,3 +726,9 @@ section {
 
 /*Animations*/
 
+/*ICONS*/
+
+.social-media {
+  height: 20px;
+  width: 20px;
+}

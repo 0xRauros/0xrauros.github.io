@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0xRauros - Interesting</title>
+    <link rel="icon" type="image/x-icon" href="../static/images/skull.ico">
+
+     <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        crossorigin="anonymous">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    <link rel="stylesheet" href="../../static/css/posts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/vs2015.min.css">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <div class="container p-2">
+        <nav class="navbar navbar-expand-lg">
+          <a class="navbar-brand " href="#">HOME</a>
+          <a class="navbar-brand " href="templates/posts.html">BLOG</a>
+          <a class="navbar-brand disabled" href="#">PROJECTS</a>
+          <a class="navbar-brand disabled" href="templates/posts/wadi_rum_hike.html">ADVENTURES</a>
+          <a class="navbar-brand disabled" href="#">GALLERY</a>
+          <a class="navbar-brand disabled" href="#">ABOUT ME</a>
+        </nav>
+    </div>
+
+    <br>
+    <br>
+    
+    <div class="container">
+        <h2 class="text-center mb-4 welcome-title">Quick Linux setup for .NET development using Docker and Visual Studio Code</h2>
+
+        <p> 
+            Small quick setup to develop applications with the <b class="glow">.NET SDK</b> and <b class="glow">MSSQL</b> on <b class="glow">Linux</b>. 
+            We will use <b class="glow">Docker</b> containers and the Visual Studio Code <b class="glow">Dev Containers</b> 
+            extension to create a super portable development environment!
+        </p>
+
+        <p>
+            First of all, we need to install these 3 extensions on our Visual Studio Code editor.
+        </p>
+
+        <div class="post-img-container mb-4">
+            <img src="../../static/images/posts/quick_NET_linux_setup/01_extensiones.png" alt="extensions" width="30%" height="30%">
+        </div>
+
+        <p>Before continuing, make sure you have Docker installed and working correctly on your operating system, 
+            in my case and for this post it is Fedora Linux 37. <a target="_blank" href="https://docs.docker.com/engine/install/">Install Docker.</a>
+        </p>        
+
+        <p>Now, let's create the following project structure.</p>
+
+        <div class="post-img-container mb-4">
+            <img src="../../static/images/posts/quick_NET_linux_setup/02_tree.png" alt="tree" width="30%" height="30%">
+        </div>
+
+        <p>
+            Our <b class="glow">Dockerfile</b> should look like this.
+        </p>
+
+        <pre><code class="language-yaml">
+        ARG VARIANT="7.0"
+        FROM mcr.microsoft.com/vscode/devcontainers/dotnet:0-${VARIANT}
+
+        RUN apt-get update && \
+            export DEBIAN_FRONTEND=noninteractive && \
+            curl -sSL https://get.docker.com/ | sh
+
+        RUN dotnet tool install -g dotnet-ef
+        ENV PATH $PATH:/root/.dotnet/tools
+        # configure for https
+        RUN dotnet dev-certs https
+        </code></pre>
+
+        <p>
+            We are using a fully equipped container as a .NET development environment including Entity Framework.
+            We also need to add the following variables to our <b class="glow">sqlserver.env</b> file.
+        </p>
+
+        <pre><code class="language-yaml">
+            ACCEPT_EULA="Y"
+            SA_PASSWORD="Password1"
+        </code></pre>
+
+        <p>
+            Let's configure now our <b class="glow">docker-compose.yaml</b>
+            file as the following
+        </p>
+
+        <pre><code class="language-yaml rounded">
+        version: '3.4'
+        services:
+            sql_server:
+                container_name: sqlserver
+                image: "mcr.microsoft.com/mssql/server:2022-latest"
+                ports:
+                    - "9876:1433"
+                volumes:
+                    -habit-db-volume:/var/lib/mssqlql/data/
+            env_file:
+                - sqlserver/sqlserver.env
+        dev-env:
+            container_name: dev-env
+            build:
+            context: ./dev-env
+            volumes:
+                - "..:/workspace"
+            stdin_open: true # docker run -i
+            tty: true # docker run -t
+        volumes:
+            habit-db-volume: null
+        </code></pre>
+
+        <p>
+            Open a terminal session and from the docker directory execute the <b class="glow">"docker compose up"</b>.                       
+        </p>
+
+        <pre><code class="language-bash">
+      $  cd docker
+      $  docker compose up
+        </code></pre>
+
+        <p>Wait until the end of the process. It may take some time the first time.</p>
+
+        <div class="post-img-container mb-4">
+            <img src="../../static/images/posts/quick_NET_linux_setup/05_compose_out.png" alt="tree">
+        </div>
+
+        <p>Great. Now that we have two containers setup, one with <b class="glow">.NET SDK</b> and 
+            <b class="glow">Entity Framework</b> and 
+            the other one with an <b class="glow">SQL Server</b> instance, let's intereact with them to make sure
+            that everything works us expected.
+        </p>
+
+        <p>Open another terminal session and type the next.</p>
+
+        <pre><code class="language-bash">
+        $ docker exec -it dev-env /bin/bash
+        $ dotnet --version
+        $ dotnet-ef --version
+        </code></pre>
+
+        <div class="post-img-container mb-4">
+            <img src="../../static/images/posts/quick_NET_linux_setup/06_docker_exec.png" alt="term pic">
+        </div>
+
+        <p>And same with the MSSQL container.</p>
+
+        <pre><code class="language-bash">
+        $ docker exec -it sqlserver /bin/bash
+        $ /opt/mssql-tools/bin/sqlcmd -S localhost -U SA
+        </code></pre>
+        <p>Where -S means the server name and -U the login_id defined inside sqlserver.env.</p>
+
+        <pre><code class="language-sql">
+        > SELECT @@VERSION
+        > GO
+        </code></pre>
+
+        <p>You should expect and output like this:</p>
+
+        <div class="post-img-container mb-4">
+            <img src="../../static/images/posts/quick_NET_linux_setup/07_sqlout.png" alt="tree">
+        </div>
+
+        <p>Now it's time to configure our Visual Studio environment using Dev Containers extension.
+            This extension will take care of saving our visual studio development configuration, with all
+            the extensions and tools (like Docker) used to develop the project and allow us to use it anyware
+            without worrying about configurations.
+        </p>
+
+        <p>Let's create a new directory inside <b class="glow">TEST_APP</b> folder called <b class="glow">.devcontainer</b>
+            with a file called <b class="glow">devcontainer.json</b> (our dev containers configuration).
+            As it follows:
+        </p>
+
+       <pre><code class="language-json rounded">
+    {
+        "name": "TEST APP",
+        "dockerComposeFile": ["../docker/docker-compose.yaml"],
+        "service": "dev-env",
+        "workspaceFolder": "/workspace",
+        "customizations": {
+            "vscode": {
+                "extensions": [
+                    "ms-dotnettools.csharp",
+                    "shardulm94.trailing-spaces",
+                    "mikestead.dotenv",
+                    "fernandoescolar.vscode-solution-explorer",
+                    "jmrog.vscode-nuget-package-manager",
+                    "patcx.vscode-nuget-gallery",
+                    "pkief.material-icon-theme",
+                    "ms-mssql.mssql",
+                    "humao.rest-client",
+                    "rangav.vscode-thunder-client",
+                    "formulahendry.dotnet-test-explorer",
+                    "kevin-chatham.aspnetcorerazor-html-css-class-completion",
+                    "syncfusioninc.blazor-vscode-extensions",
+                    "ms-dotnettools.vscode-dotnet-runtime",
+                    "ms-dotnettools.blazorwasm-companion"
+                    ]
+              }
+        },
+        "remoteUser": "root"
+    }
+        </code></pre>
+
+        <p>These are some of the extension that we can use for .NET development with 
+            Visual Studio Code. You can remove or add more as you want.
+        </p>
+
+        <p>In order to put this into work we have to enable our new Dev Container. To do that,
+            we press F-1 key and select the following option (Rebuild and Reopen in Container).
+        </p>
+
+        <div class="post-img-container mb-4">
+            <img src="../../static/images/posts/quick_NET_linux_setup/08_f1.png" alt="tree">
+        </div>
+
+        <p>Now if you look to the bottom-left of your VSC window you will see a blue badge
+            telling that the Dev Container TEST_APP is active. You can make sure opening a new 
+            terminal inside VSC and typing <b class="glow">"dotnet --version"</b>. You should get
+            the version of .NET as we just created a Dev Container of our dev-env docker container.
+        </p>
+
+        <div class="post-img-container mb-4">
+            <img src="../../static/images/posts/quick_NET_linux_setup/09_active_dev_cont.png" alt="tree">
+        </div>
+
+        <p>As you can see, the terminal we just opened runs as <b class="glow">"root"</b>. That's 
+            how we defined in our <b class="glow">devcontainer.json</b> with the <b class="glow">"RemoteUser":"root"</b> parameter.
+        </p>
+    
+        <div class="post-img-container mb-4">
+            <img src="../../static/images/posts/quick_NET_linux_setup/010_term.png" alt="tree">
+        </div>    
+
+        <p>
+            In summary, we have created a container with the .NET SDK and entity framework 
+            and on the other hand a container with the SQL Server database engine. All of 
+            this is configured using the VSC Dev Containers extension so that anyone can 
+            clone our project in detail, including the extensions that we have used in 
+            our development environment. A very effective solution that should work on 
+            any machine that supports Docker and Visual Studio Code! 
+        </p>
+
+        <br>
+        <br>
+        <div class="pt-2">
+            <p class=""><a href="../posts.html" class="font-permanent h5 glow"><i class="bi bi-caret-right-fill"></i> Back</a></p>
+        </div>
+
+    </div>
+
+    <br>
+    <br>
+
+    <footer class="text-center p-4">
+        <p>Powered by ❤️ and ☕</p>
+      </footer>
+
+    <script src="https://kit.fontawesome.com/961d7b02e1.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

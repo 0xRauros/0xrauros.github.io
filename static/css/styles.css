@@ -1,0 +1,232 @@
+  /*  FONTS */
+
+  @font-face {
+    font-family: '8BitsRegular';
+    src: url('../fonts/8-bit-operator/8bitOperatorPlus-Regular.ttf');
+  }
+  
+  @font-face {
+    font-family: '8BitsBold';
+    src: url('../fonts/8-bit-operator/8bitOperatorPlus-Bold.ttf');
+  }
+
+  @font-face {
+    font-family: 'PermanentMarker';
+    src: url('../fonts/Permanent_Marker/PermanentMarker-Regular.ttf');
+  }
+
+  a.disabled {
+    pointer-events: none; /* Desactiva los clics */
+    color: gray; /* Cambia el color del texto para que se vea desactivado */
+    text-decoration: none; /* Opcional: Elimina el subrayado si lo deseas */
+    cursor: not-allowed; /* Cambia el cursor a una cruz para indicar que no es interactivo */
+}
+
+.bg-dark-4 {
+    background: #404040;
+}
+
+.font-permanent {
+    font-family: "PermanentMarker";
+}
+
+body {
+    background: #333333;
+    color: #ffffff;
+}
+
+.neon-border {
+    border-style: solid;
+    border-color: #09fbd3;
+    border-width: 2px;
+  }
+
+  .welcome-title {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-family: "PermanentMarker";
+  }
+
+  .secondary-title {
+    color: #E5E4E4;
+    font-weight: bold;
+    font-family: "PermanentMarker";
+  }
+
+  /* Navbar menu */
+  .header {
+      width: 100%;
+      text-align: right;
+      position: relative;
+    }
+    .header .logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 32px;
+      font-weight: 100;
+      padding: 26px;
+      color: #FFFFFF;
+  
+    }
+    
+    .glow {
+      color: #09fbd3;
+    }
+  
+    .blur-rule {
+      height: 1px;
+      width: 100%;
+      background-color: #09fbd3;
+      margin: 20px 0;
+      display: block;
+      
+      -webkit-box-shadow: 0 0 4px 0 #666;
+      -moz-box-shadow: 0 0 4px 0 #666;
+      box-shadow: 0 0 4px 0 #666;
+    }
+  
+    .link {
+      display: inline-block;
+      padding: 15px 0;
+      margin: 15px 25px;
+      position: relative;
+      text-decoration: none;
+      text-transform: uppercase;
+      color: #0f0f0f;
+      font-weight: 800;
+      font-size: 24px;
+    }
+    .link .bar {
+      width: 100%;
+      display: inline-block;
+      border-bottom: 5px solid #09fbd3;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      transition: all 300ms;
+    }
+    .link:hover .bar {
+      opacity: 1;
+      bottom: 5px;
+    }
+  
+    .logo-title {
+      color: #FFFFFF;
+    }
+  /* End of navbar menu */
+  
+  body {
+      /*background-image: url("../images/backgrounds/background001.jpg");*/
+      background-color: #333333;
+      font-family: 'monospace';
+  }
+  
+  .stack-wrapper {
+    border-radius: 12px;
+    border-style: solid;
+    border-color: #09fbd3;
+  }
+  
+  .description-wrapper {
+    
+  }
+  
+  h1, h2, h3, h4, h5, h6, .title, .logo {
+      /* font-family: 'Permanent marker', cursive; */
+      font-family: '8BitsBold';
+      color: #FFFFFF;
+    }
+  
+  .currently-info {
+    color: #FFFFFF;
+    text-align: center;
+    font-family: '8BitsBold';
+    font-size: 20px;
+  }
+  
+  .programming-icons {
+    text-align: center;
+    font-size: 36px;
+  }
+  
+  .title {
+      color: #FFFFFF;
+  }
+  
+  .subtitle {
+      color: gray;
+  }
+  
+  a {
+      color: #09fbd3;
+      text-decoration: none;
+      font-family: '8BitsBold';
+    }
+    
+    a:hover {
+      color: #09fbd3;
+      text-decoration: none;
+    }
+  
+    .neon-blue{
+      color: #09fbd3;
+    }
+    
+    .deep-dark { /*Background dark*/
+      background: rgba(25, 28, 31, 0.8);
+    }
+    
+    .clear-dark { /*Dark but favorable for reading and in contrast with deep-dark*/
+      background: #333333;
+    }
+    
+    p {
+      color: #e4e0e0;
+      font-size: 1em;
+    }
+  
+    /*  Icons   */
+  
+    .social-links, a {
+      color:#FFFFFF;
+    }
+  
+    .b-neon {
+      border: 5px solid #09fbd3;
+      border-radius: 100%;
+    }
+  
+    .nav-menu {
+      font-size: 20px;
+      color: #FFFFFF;
+    }
+  
+    .nav-menu:hover {
+      color: #09fbd3;
+    }
+  
+    .btn-neon {
+      font-size: 20px;
+    }
+  
+    .neon-text {
+      color: #09fbd3;
+      font-weight: bold;
+      font-family: '8BitsBold';
+    }
+  
+    .about-me-text {
+      font-size: 18px;
+    }
+
+    .intro-text {
+      font-size: 1.2em;
+    }
+  
+  .bg-my-dark {
+    background: #333333;
+    color: #ffffff;
+  }
+  

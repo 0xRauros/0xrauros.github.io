@@ -1,0 +1,28 @@
+.neon-border {
+    border-width: 2px;
+    border-color: #09fbd3;
+
+}
+
+.btn:hover {
+    background-color: #09fbd3;
+    color: white;
+    border-color: #09fbd3;
+}
+
+.shell-panel {
+    background-color: #555555;
+    border-radius: 1%;
+}
+
+.code-panel {
+    background-color: #888888;
+    border-radius: 1%;
+}
+
+.last-activity-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
